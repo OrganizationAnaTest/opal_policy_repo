@@ -4,14 +4,18 @@ import future.keywords.some
 
 # Obtener el token OAuth de Entra ID
 oauth_token() = token {
+    client_id := getenv("CLIENT_ID")
+    client_secret := getenv("CLIENT_SECRET")
+    token_url := getenv("TOKEN_URL")
+
     response := http.send({
         "method": "POST",
-        "url": "https://login.microsoftonline.com/TU_TENANT_ID/oauth2/v2.0/token",
+        "url": token_url,
         "headers": { "Content-Type": "application/x-www-form-urlencoded" },
         "body": {
             "grant_type": "client_credentials",
-            "client_id": "TU_CLIENT_ID",
-            "client_secret": "TU_CLIENT_SECRET",
+            "client_id": client_id,
+            "client_secret": client_secret,
             "scope": "https://graph.microsoft.com/.default"
         }
     })

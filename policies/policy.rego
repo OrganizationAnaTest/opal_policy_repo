@@ -1,7 +1,5 @@
 package authz
 
-default allow = false
-
 import future.keywords.some
 
 # Obtener el token OAuth de Entra ID

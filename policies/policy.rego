@@ -1,6 +1,6 @@
 package authz
 
-default allow = true
+default allow = false
 
 import future.keywords.some
 

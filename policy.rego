@@ -52,7 +52,7 @@ process_inherits_access(requested_process_id, accessible_process_id) {
     accessible_process_id == parent_process_id
 }
 
-# Permitir si el email del usuario es uno 
+# Permitir si el email del usuario es manuel.cerezo@ejemplo.es
 allow {
     input.user.email == "manuel.cerezo@ejemplo.es"
 }

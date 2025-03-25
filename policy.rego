@@ -1,8 +1,8 @@
 package authz
 
-default allow = true
+default allow = false
 
-import future.keywords.some
+import future.keywords.in
 
 # Obtener el token OAuth de Entra ID
 oauth_token() = token {

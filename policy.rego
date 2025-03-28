@@ -49,19 +49,23 @@ process_inherits_access[process_id] contains true if {
 
 # Permiso basado en relación para tareas con `status=error`
 allow if {
-    # Validar el email y el proceso desde el input
     user_email := input.user.email
+    trace(sprintf("Usuario: %s", [user_email]))
+
     process_id := input.process_id
+    trace(sprintf("Proceso ID: %s", [process_id]))
 
-    # Validar tarea y proceso
     task_id := data.process_task[process_id]
+    trace(sprintf("Tarea ID: %s", [task_id]))
+
     data.tasks[task_id].status == "error"
+    trace("Tarea en estado 'error'")
 
-    # Validar acceso por grupo o herencia
     allow_process_access[process_id]
+    trace(sprintf("Acceso al proceso %s permitido", [process_id]))
 
-    # Validación de país
     input.user.country == data.processes[process_id].country
+    trace("País validado")
 }
 
 # Separamos las reglas para acceso por grupo o herencia

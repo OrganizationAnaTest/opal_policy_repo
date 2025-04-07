@@ -72,9 +72,9 @@ allow if {
     allow_process_access[process_id]
     trace(sprintf("Acceso al proceso %s permitido", [process_id]))
 
-    input.user.country == data.processes[process_id].country {
+    input.user.country == data.processes[process_id].country 
     trace(sprintf("Validación de país: Usuario '%s' vs Proceso '%s'", [input.user.country, data.processes[process_id].country]))  # Imprime los valores para ver qué está pasando
-    }
+
 }
 
 # Separamos las reglas para acceso por grupo o herencia

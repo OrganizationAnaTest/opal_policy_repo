@@ -9,7 +9,7 @@ oauth_token if {
 # Obtener grupos de un usuario de manera segura
 user_groups[user_email] contains group if {
     # Obtener el email del input de manera controlada
-    user_email := input.user.email
+    user_email := input.user.mail
     response := http.send({
         "method": "GET",
         "url": sprintf("https://graph.microsoft.com/v1.0/users/%s/memberOf", [user_email]),
@@ -25,7 +25,7 @@ user_groups[user_email] contains group if {
 # Verifica si el grupo del usuario tiene acceso al proceso
 group_has_access_to_process[process_id] contains true if {
     # Asegurar que el email del usuario proviene de input
-    user_email := input.user.email
+    user_email := input.user.mail
     group := user_groups[user_email]
     trace(sprintf("Grupo del usuario: %s", [group]))  # Asegúrate de que el grupo está correctamente asignado
     group in data.process_group[process_id]  # Verifica que el grupo esté listado para el proceso
@@ -41,7 +41,7 @@ process_inherits_access[process_id] contains true if {
 
 # Permiso basado en relación para tareas con `status=error`
 allow if {
-    user_email := input.user.email
+    user_email := input.user.mail
     trace(sprintf("Usuario: %s", [user_email]))
 
     process_id := input.process_id
@@ -63,7 +63,7 @@ allow if {
 
 # Separamos las reglas para acceso por grupo o herencia
 allow_process_access[process_id] contains true if {
-    user_email := input.user.email
+    user_email := input.user.mail
     trace(sprintf("Email del usuario: %s", [user_email]))  # Esto imprimirá el email del usuario
     user_email == "expected_email@domain.com"  # Puedes verificar si el email está correcto
     process_id := input.process_id

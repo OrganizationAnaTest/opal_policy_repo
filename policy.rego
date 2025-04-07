@@ -21,7 +21,7 @@ user_object_id[user_email] := object_id if {
 
 # Obtener grupos de un usuario de manera segura
 user_groups[user_email] contains group if {
-    object_id := user_object_id[user_email]  # Usa el Object ID obtenido
+    object_id := user_object_id[user_email]
     response := http.send({
         "method": "GET",
         "url": sprintf("https://graph.microsoft.com/v1.0/users/%s/memberOf", [object_id]),
@@ -31,8 +31,9 @@ user_groups[user_email] contains group if {
         }
     })
     count(response.body.value) > 0
-    group := [g.displayName | g := response.body.value]
+    group := [g.displayName | g := response.body.value if g.displayName]
 }
+
 
 # Verifica si el grupo del usuario tiene acceso al proceso
 group_has_access_to_process[process_id] contains true if {

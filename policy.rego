@@ -2,8 +2,8 @@ package authz
 
 # Obtener el token OAuth de Entra ID
 oauth_token if {
-    token := data.oauth.token # <-- accedes al token así
-    trace(sprintf("Token de acceso: %s", [token]))  # Esto imprimirá el token para verificar que está siendo asignado correctamente
+    oauth_token := data.oauth.token.token # <-- accedes al token así
+    trace(sprintf("Token de acceso: %s", [oauth_token]))  # Esto imprimirá el token para verificar que está siendo asignado correctamente
 }
 
 # Obtener grupos de un usuario de manera segura
@@ -14,7 +14,7 @@ user_groups[user_email] contains group if {
         "method": "GET",
         "url": sprintf("https://graph.microsoft.com/v1.0/users/%s/memberOf", [user_email]),
         "headers": {
-            "Authorization": sprintf("Bearer %s", [oauth_token]),
+            "Authorization": sprintf("Bearer %s", [data.oauth.token.token]),
             "Content-Type": "application/json"
         }
     })

@@ -19,6 +19,7 @@ package authz
 # Obtener el token OAuth de Entra ID
 oauth_token if {
     token := data.oauth.token # <-- accedes al token así
+    trace(sprintf("Token de acceso: %s", [token]))  # Esto imprimirá el token para verificar que está siendo asignado correctamente
 }
 
 # Obtener grupos de un usuario de manera segura
@@ -42,14 +43,16 @@ group_has_access_to_process[process_id] contains true if {
     # Asegurar que el email del usuario proviene de input
     user_email := input.user.email
     group := user_groups[user_email]
-    group in data.process_group[process_id]
+    trace(sprintf("Grupo del usuario: %s", [group]))  # Asegúrate de que el grupo está correctamente asignado
+    group in data.process_group[process_id]  # Verifica que el grupo esté listado para el proceso
 }
 
 # Verifica si el proceso puede llamar a otro proceso (herencia de permisos)
 process_inherits_access[process_id] contains true if {
     some parent_process_id
     parent_process_id = data.process_relation[process_id][_]
-    parent_process_id in data.processes
+    trace(sprintf("Proceso padre: %s", [parent_process_id]))  # Verifica que el proceso padre esté correctamente asignado
+    parent_process_id in data.processes  # Asegúrate de que el proceso padre existe
 }
 
 # Permiso basado en relación para tareas con `status=error`
@@ -69,12 +72,19 @@ allow if {
     allow_process_access[process_id]
     trace(sprintf("Acceso al proceso %s permitido", [process_id]))
 
-    input.user.country == data.processes[process_id].country
-    trace("País validado")
+    input.user.country == data.processes[process_id].country {
+    trace(sprintf("Validación de país: Usuario '%s' vs Proceso '%s'", [input.user.country, data.processes[process_id].country]))  # Imprime los valores para ver qué está pasando
+    }
 }
 
 # Separamos las reglas para acceso por grupo o herencia
 allow_process_access[process_id] contains true if {
+    user_email := input.user.email
+    trace(sprintf("Email del usuario: %s", [user_email]))  # Esto imprimirá el email del usuario
+    user_email == "expected_email@domain.com"  # Puedes verificar si el email está correcto
+    process_id := input.process_id
+    trace(sprintf("ID del proceso: %s", [process_id]))  # Imprime el ID del proceso
+    process_id == "expected_process_id"  # Puedes verificar si el proceso está bien definido
     group_has_access_to_process[process_id]
 }
 

@@ -15,7 +15,11 @@ package authz
 #    })
 #    token := response.body.access_token
 #}
-data.oauth.token # <-- accedes al token así
+
+# Obtener el token OAuth de Entra ID
+oauth_token if {
+    token := data.oauth.token # <-- accedes al token así
+}
 
 # Obtener grupos de un usuario de manera segura
 user_groups[user_email] contains group if {

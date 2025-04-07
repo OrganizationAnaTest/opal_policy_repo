@@ -6,19 +6,31 @@ oauth_token if {
     trace(sprintf("Token de acceso: %s", [oauth_token]))  # Esto imprimirá el token para verificar que está siendo asignado correctamente
 }
 
-# Obtener grupos de un usuario de manera segura
-user_groups[user_email] contains group if {
-    # Obtener el email del input de manera controlada
-    user_email := input.user.mail
+user_object_id[user_email] := object_id if {
     response := http.send({
         "method": "GET",
-        "url": sprintf("https://graph.microsoft.com/v1.0/users/%s/memberOf", [user_email]),
+        "url": sprintf("https://graph.microsoft.com/v1.0/users?$filter=mail eq '%s'", [user_email]),
         "headers": {
             "Authorization": sprintf("Bearer %s", [data.oauth.token.token]),
             "Content-Type": "application/json"
         }
     })
-    # Se asegura que la respuesta contenga datos seguros
+    count(response.body.value) > 0
+    object_id := response.body.value[0].id
+}
+
+# Obtener grupos de un usuario de manera segura
+user_groups[user_email] contains group if {
+    object_id := user_object_id[user_email]  # Usa el Object ID obtenido
+    response := http.send({
+        "method": "GET",
+        "url": sprintf("https://graph.microsoft.com/v1.0/users/%s/memberOf", [object_id]),
+        "headers": {
+            "Authorization": sprintf("Bearer %s", [data.oauth.token.token]),
+            "Content-Type": "application/json"
+        }
+    })
+    count(response.body.value) > 0
     group := [g.displayName | g := response.body.value]
 }
 

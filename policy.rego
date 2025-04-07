@@ -1,20 +1,21 @@
 package authz
 
 # Obtener el token OAuth de Entra ID
-oauth_token if {
-    response := http.send({
-        "method": "POST",
-        "url": "https://login.microsoftonline.com/TU_TENANT_ID/oauth2/v2.0/token",
-        "headers": {"Content-Type": "application/x-www-form-urlencoded"},
-        "body": {
-            "grant_type": "client_credentials",
-            "client_id": "TU_CLIENT_ID",
-            "client_secret": "TU_CLIENT_SECRET",
-            "scope": "https://graph.microsoft.com/.default"
-        }
-    })
-    token := response.body.access_token
-}
+#oauth_token if {
+#    response := http.send({
+#        "method": "POST",
+#        "url": "https://login.microsoftonline.com/TU_TENANT_ID/oauth2/v2.0/token",
+#        "headers": {"Content-Type": "application/x-www-form-urlencoded"},
+#        "body": {
+#            "grant_type": "client_credentials",
+#            "client_id": "TU_CLIENT_ID",
+#            "client_secret": "TU_CLIENT_SECRET",
+#            "scope": "https://graph.microsoft.com/.default"
+#       }
+#    })
+#    token := response.body.access_token
+#}
+data.oauth.token # <-- accedes al token así
 
 # Obtener grupos de un usuario de manera segura
 user_groups[user_email] contains group if {

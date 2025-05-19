@@ -6,33 +6,43 @@ oauth_token if {
     trace(sprintf("Token de acceso: %s", [oauth_token]))  # Esto imprimirá el token para verificar que está siendo asignado correctamente
 }
 
-user_object_id[user_email] := object_id if {
-    response := http.send({
-        "method": "GET",
-        "url": sprintf("https://graph.microsoft.com/v1.0/users?$filter=mail eq '%s'", [user_email]),
-        "headers": {
-            "Authorization": sprintf("Bearer %s", [data.oauth.token.token]),
-            "Content-Type": "application/json"
-        }
-    })
-    count(response.body.value) > 0
-    object_id := response.body.value[0].id
+default allow = false
+
+allow {
+    input.request.parsed_token.payload.groups[_] == "devops_team"
+  #    some i
+  #  io.jwt.decode_verify(input.token, {"keys": data.jwks.keys})
+  #  decoded := io.jwt.decode(input.token)
+  #  decoded.payload.groups[i] == "devops_team"
 }
 
+#user_object_id[user_email] := object_id if {
+#    response := http.send({
+#        "method": "GET",
+#        "url": sprintf("https://graph.microsoft.com/v1.0/users?$filter=mail eq '%s'", [user_email]),
+#        "headers": {
+#            "Authorization": sprintf("Bearer %s", [data.oauth.token.token]),
+#            "Content-Type": "application/json"
+#        }
+#    })
+#    count(response.body.value) > 0
+#    object_id := response.body.value[0].id
+#}
+
 # Obtener grupos de un usuario de manera segura
-user_groups[user_email] contains group if {
-    object_id := user_object_id[user_email]
-    response := http.send({
-        "method": "GET",
-        "url": sprintf("https://graph.microsoft.com/v1.0/users/%s/memberOf", [object_id]),
-        "headers": {
-            "Authorization": sprintf("Bearer %s", [data.oauth.token.token]),
-            "Content-Type": "application/json"
-        }
-    })
-    count(response.body.value) > 0
-    group := [g.displayName]
-}
+#user_groups[user_email] contains group if {
+#    object_id := user_object_id[user_email]
+#    response := http.send({
+#        "method": "GET",
+#        "url": sprintf("https://graph.microsoft.com/v1.0/users/%s/memberOf", [object_id]),
+#        "headers": {
+#            "Authorization": sprintf("Bearer %s", [data.oauth.token.token]),
+#            "Content-Type": "application/json"
+#        }
+#    })
+#    count(response.body.value) > 0
+#    group := [g.displayName]
+#}
 
 
 # Verifica si el grupo del usuario tiene acceso al proceso
@@ -53,9 +63,9 @@ user_groups[user_email] contains group if {
 #}
 
 # Permiso basado en relación para tareas con `status=error`
-allow if {
-    user_email := input.user.mail
-    trace(sprintf("Usuario: %s", [user_email]))
+#allow if {
+#    user_email := input.user.mail
+#    trace(sprintf("Usuario: %s", [user_email]))
 
  #   process_id := input.process_id
  #   trace(sprintf("Proceso ID: %s", [process_id]))
@@ -72,7 +82,7 @@ allow if {
  #   input.user.country == data.processes[process_id].country 
  #   trace(sprintf("Validación de país: Usuario '%s' vs Proceso '%s'", [input.user.country, data.processes[process_id].country]))  # Imprime los valores para ver qué está pasando
 
-}
+#}
 
 # Separamos las reglas para acceso por grupo o herencia
 #allow_process_access[process_id] contains true if {

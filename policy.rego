@@ -31,7 +31,7 @@ user_groups[user_email] contains group if {
         }
     })
     count(response.body.value) > 0
-    group := [g.displayName | g := response.body.value if g.displayName]
+    group := [g.displayName]
 }
 
 

@@ -8,7 +8,7 @@ oauth_token if {
 
 default allow = false
 
-allow {
+allow if{
     input.request.parsed_token.payload.groups[_] == "devops_team"
   #    some i
   #  io.jwt.decode_verify(input.token, {"keys": data.jwks.keys})

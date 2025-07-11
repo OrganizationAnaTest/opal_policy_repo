@@ -1,4 +1,5 @@
 package authz
+import future.keywords.if
 
 # Obtener el token OAuth de Entra ID
 oauth_token if {

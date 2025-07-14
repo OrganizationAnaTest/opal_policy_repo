@@ -1,6 +1,6 @@
 package play
 
-import rego.v1
+#import rego.v1
 
 #package authz
 #import future.keywords.if
@@ -11,11 +11,7 @@ import rego.v1
 #    trace(sprintf("Token de acceso: %s", [oauth_token]))  # Esto imprimirá el token para verificar que está siendo asignado correctamente
 #}
 
-default allow = false
-
-allow {
- "Hello"
-}
+default allow := false
 
 #allow if{
    # input.request.parsed_token.payload.groups[_] == "devops_team"

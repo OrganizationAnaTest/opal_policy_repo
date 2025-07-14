@@ -1,21 +1,21 @@
 package authz
-import future.keywords.if
+#import future.keywords.if
 
 # Obtener el token OAuth de Entra ID
-oauth_token if {
-    oauth_token := data.oauth.token.token # <-- accedes al token así
-    trace(sprintf("Token de acceso: %s", [oauth_token]))  # Esto imprimirá el token para verificar que está siendo asignado correctamente
-}
+#oauth_token if {
+#    oauth_token := data.oauth.token.token # <-- accedes al token así
+#    trace(sprintf("Token de acceso: %s", [oauth_token]))  # Esto imprimirá el token para verificar que está siendo asignado correctamente
+#}
 
 default allow = true
 
-allow if{
-    input.request.parsed_token.payload.groups[_] == "devops_team"
+#allow if{
+   # input.request.parsed_token.payload.groups[_] == "devops_team"
   #    some i
   #  io.jwt.decode_verify(input.token, {"keys": data.jwks.keys})
   #  decoded := io.jwt.decode(input.token)
   #  decoded.payload.groups[i] == "devops_team"
-}
+#}
 
 #user_object_id[user_email] := object_id if {
 #    response := http.send({

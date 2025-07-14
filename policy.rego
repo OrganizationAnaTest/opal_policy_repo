@@ -1,4 +1,8 @@
-package authz
+package play
+
+import rego.v1
+
+#package authz
 #import future.keywords.if
 
 # Obtener el token OAuth de Entra ID
@@ -7,7 +11,11 @@ package authz
 #    trace(sprintf("Token de acceso: %s", [oauth_token]))  # Esto imprimirá el token para verificar que está siendo asignado correctamente
 #}
 
-default allow = true
+default allow = false
+
+allow {
+ "Hello"
+}
 
 #allow if{
    # input.request.parsed_token.payload.groups[_] == "devops_team"

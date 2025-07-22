@@ -14,7 +14,8 @@ package play
 default allow := false
 
 allow {
-    input.request.parsed_token.payload.groups[_] == "devops_team"
+    #input.request.parsed_token.payload.groups[_] == "devops_team"
+    input.request.upn == "maria.rriguez@anasnjnlaborg.onmicrosoft.com"
 }
 
 #allow if{

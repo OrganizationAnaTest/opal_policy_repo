@@ -1,6 +1,6 @@
 package play
 
-import rego.v1
+#import rego.v1
 
 #package authz
 #import future.keywords.if
@@ -13,13 +13,17 @@ oauth_token if {
 
 default allow := false
 
-allow if{
-   input.request.parsed_token.payload.groups[_] == "devops_team"
-      some i
-    io.jwt.decode_verify(input.token, {"keys": data.jwks.keys})
-    decoded := io.jwt.decode(input.token)
-    decoded.payload.groups[i] == "devops_team"
+allow {
+    input.request.parsed_token.payload.groups[_] == "devops_team"
 }
+
+#allow if{
+ #  input.request.parsed_token.payload.groups[_] == "devops_team"
+  #    some i
+   # io.jwt.decode_verify(input.token, {"keys": data.jwks.keys})
+    #decoded := io.jwt.decode(input.token)
+   # decoded.payload.groups[i] == "devops_team"
+#}
 
 #user_object_id[user_email] := object_id if {
 #    response := http.send({

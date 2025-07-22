@@ -15,6 +15,7 @@ default allow := false
 
 allow {
     #input.request.parsed_token.payload.groups[_] == "devops_team"
+    debug:=input.request.parsed_token.payload
     input.request.parsed_token.payload.upn == "maria.rriguez@anasnjnlaborg.onmicrosoft.com"
 }
 

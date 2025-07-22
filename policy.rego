@@ -6,10 +6,10 @@ package play
 #import future.keywords.if
 
 # Obtener el token OAuth de Entra ID
-oauth_token if {
-    oauth_token := data.oauth.token.token # <-- accedes al token así
-    trace(sprintf("Token de acceso: %s", [oauth_token]))  # Esto imprimirá el token para verificar que está siendo asignado correctamente
-}
+#oauth_token if {
+#    oauth_token := data.oauth.token.token # <-- accedes al token así
+#    trace(sprintf("Token de acceso: %s", [oauth_token]))  # Esto imprimirá el token para verificar que está siendo asignado correctamente
+#}
 
 default allow := false
 
